@@ -1,0 +1,35 @@
+<app-nav></app-nav>
+<div class="article-container" *ngIf="article; else loading">
+  <h1 class="article-title">{{ article.title }}</h1>
+  <p class="article-content">{{ article.content }}</p>
+  <h3 class="author-info">Author: {{ article.author!.email }}</h3>
+
+  <div class="comments-section" *ngIf="article.comments!.length > 0; else noComments">
+    <h4>Comments:</h4>
+    <ul class="comments-list">
+      <li *ngFor="let comment of article.comments">
+        {{ comment?.content }} - {{ comment?.author?.email }}
+      </li>
+    </ul>
+  </div>
+  <ng-template #noComments>
+    <p class="no-comments">Be the first to comment</p>
+  </ng-template>
+
+  <div class="likes-section">
+    <h4>Likes: {{ article.likes?.length }}</h4>
+    <button class="like-button" (click)="addLike()" [disabled]="isLiked">Like</button>
+  </div>
+
+  <div class="add-comment-section">
+    <h4>Add a Comment:</h4>
+    <textarea [(ngModel)]="newComment" placeholder="Add your comment here"></textarea>
+    <button class="add-comment-button" (click)="addComment()">Submit</button>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="loading-section">
+    <p>Loading...</p>
+  </div>
+</ng-template>

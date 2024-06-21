@@ -1,0 +1,33 @@
+<app-nav></app-nav>
+  <div class="container-artciles">
+  <h1>Tous les articles </h1>
+  <br>
+  <div class="table-container">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Comments</th>
+        <th>Likes</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let article of articles" (click)="navigateToArticleDetail(article.id)">
+        <td>{{ article.id }}</td>
+        <td>{{ article.title }}</td>
+        <td>{{ article.author!.email }}</td>
+        <td>{{ article.comments?.length }}</td>
+        <td>{{ article.likes?.length }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+</div>
+
+
+

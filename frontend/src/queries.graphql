@@ -1,0 +1,74 @@
+  query GetArticleById($id: Int!) {
+    article(id: $id) {
+      id
+      title
+      content
+      author {
+        id
+        email
+      }
+      comments {
+        id
+        content
+        author {
+          id
+          email
+        }
+      }
+      likes {
+        id
+      }
+    }
+  }
+
+  query GetArticlesWithDetails {
+    articles {
+      id
+      title
+      content
+      author {
+        id
+        email
+      }
+      comments {
+        id
+      }
+      likes {
+        id
+      }
+    }
+  }
+
+
+  mutation AddComment($articleId: Int!, $content: String!) {
+    addComment(articleId: $articleId, content: $content) {
+      id
+      content
+      author {
+        id
+        email
+      }
+      article {
+        id
+      }
+    }
+  }
+
+  mutation AddLike($articleId: Int!) {
+    likeArticle(articleId: $articleId) {
+      id
+    }
+  }
+
+
+  mutation CreateArticle($title: String!, $content: String!) {
+    createArticle(title: $title, content: $content) {
+      id
+      title
+      content
+      author {
+        id
+        email
+      }
+    }
+  }
