@@ -14,6 +14,7 @@ export const typeDefs = gql`
         users: [User]
         articles: [Article]
         article(id: Int!): Article
+        articlesByUser(userId: Int!): [Article]
     }
 
     type Mutation {
@@ -22,6 +23,8 @@ export const typeDefs = gql`
         createArticle(title: String!, content: String!): Article
         addComment(articleId: Int!, content: String!): Comment
         likeArticle(articleId: Int!): Like
+        updateArticle(id: Int!, title: String!, content: String!): Article
+        deleteArticle(id: Int!): Article
     }
 
     type User {
@@ -69,6 +72,9 @@ export const resolvers: Resolvers<Context> = {
         articles: async () => prisma.article.findMany(),
         article: async (_parent, args, _context) => {
             return prisma.article.findUnique({ where: { id: args.id } }) ?? null;
+        },
+        articlesByUser: async (_parent, args, _context) => {
+            return prisma.article.findMany({ where: { authorId: args.userId } });
         },
     },
     Mutation: {
@@ -118,6 +124,36 @@ export const resolvers: Resolvers<Context> = {
                     user: { connect: { id: userId } },
                     article: { connect: { id: args.articleId } },
                 },
+            });
+        },
+
+        updateArticle: async (_parent, args, context) => {
+            const userId = getUserId(context);
+            const article = await prisma.article.findUnique({ where: { id: args.id } });
+
+            if (!article || article.authorId !== userId) {
+                throw new Error("Not authorized or article not found");
+            }
+
+            return prisma.article.update({
+                where: { id: args.id },
+                data: {
+                    title: args.title,
+                    content: args.content,
+                },
+            });
+        },
+
+        deleteArticle: async (_parent, args, context) => {
+            const userId = getUserId(context);
+            const article = await prisma.article.findUnique({ where: { id: args.id } });
+
+            if (!article || article.authorId !== userId) {
+                throw new Error("Not authorized or article not found");
+            }
+
+            return prisma.article.delete({
+                where: { id: args.id },
             });
         },
     },

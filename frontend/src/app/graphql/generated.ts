@@ -52,9 +52,11 @@ export type Mutation = {
   __typename?: 'Mutation';
   addComment?: Maybe<Comment>;
   createArticle?: Maybe<Article>;
+  deleteArticle?: Maybe<Article>;
   likeArticle?: Maybe<Like>;
   login?: Maybe<AuthPayload>;
   signup?: Maybe<AuthPayload>;
+  updateArticle?: Maybe<Article>;
 };
 
 
@@ -67,6 +69,11 @@ export type MutationAddCommentArgs = {
 export type MutationCreateArticleArgs = {
   content: Scalars['String']['input'];
   title: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteArticleArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -86,16 +93,29 @@ export type MutationSignupArgs = {
   password: Scalars['String']['input'];
 };
 
+
+export type MutationUpdateArticleArgs = {
+  content: Scalars['String']['input'];
+  id: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
   article?: Maybe<Article>;
   articles?: Maybe<Array<Maybe<Article>>>;
+  articlesByUser?: Maybe<Array<Maybe<Article>>>;
   users?: Maybe<Array<Maybe<User>>>;
 };
 
 
 export type QueryArticleArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type QueryArticlesByUserArgs = {
+  userId: Scalars['Int']['input'];
 };
 
 export type User = {
@@ -141,6 +161,29 @@ export type CreateArticleMutationVariables = Exact<{
 
 
 export type CreateArticleMutation = { __typename?: 'Mutation', createArticle?: { __typename?: 'Article', id: number, title: string, content: string, author?: { __typename?: 'User', id: number, email: string } | null } | null };
+
+export type UpdateArticleMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
+  content: Scalars['String']['input'];
+}>;
+
+
+export type UpdateArticleMutation = { __typename?: 'Mutation', updateArticle?: { __typename?: 'Article', id: number, title: string, content: string, author?: { __typename?: 'User', id: number, email: string } | null, comments?: Array<{ __typename?: 'Comment', id: number, content: string, author?: { __typename?: 'User', id: number, email: string } | null } | null> | null, likes?: Array<{ __typename?: 'Like', id: number } | null> | null } | null };
+
+export type DeleteArticleMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type DeleteArticleMutation = { __typename?: 'Mutation', deleteArticle?: { __typename?: 'Article', id: number } | null };
+
+export type GetArticlesByUserIdQueryVariables = Exact<{
+  userId: Scalars['Int']['input'];
+}>;
+
+
+export type GetArticlesByUserIdQuery = { __typename?: 'Query', articlesByUser?: Array<{ __typename?: 'Article', id: number, title: string, content: string, author?: { __typename?: 'User', id: number, email: string } | null, comments?: Array<{ __typename?: 'Comment', id: number } | null> | null, likes?: Array<{ __typename?: 'Like', id: number } | null> | null } | null> | null };
 
 export const GetArticleByIdDocument = gql`
     query GetArticleById($id: Int!) {
@@ -270,6 +313,89 @@ export const CreateArticleDocument = gql`
   })
   export class CreateArticleGQL extends Apollo.Mutation<CreateArticleMutation, CreateArticleMutationVariables> {
     document = CreateArticleDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateArticleDocument = gql`
+    mutation UpdateArticle($id: Int!, $title: String!, $content: String!) {
+  updateArticle(id: $id, title: $title, content: $content) {
+    id
+    title
+    content
+    author {
+      id
+      email
+    }
+    comments {
+      id
+      content
+      author {
+        id
+        email
+      }
+    }
+    likes {
+      id
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateArticleGQL extends Apollo.Mutation<UpdateArticleMutation, UpdateArticleMutationVariables> {
+    document = UpdateArticleDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteArticleDocument = gql`
+    mutation DeleteArticle($id: Int!) {
+  deleteArticle(id: $id) {
+    id
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteArticleGQL extends Apollo.Mutation<DeleteArticleMutation, DeleteArticleMutationVariables> {
+    document = DeleteArticleDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetArticlesByUserIdDocument = gql`
+    query GetArticlesByUserId($userId: Int!) {
+  articlesByUser(userId: $userId) {
+    id
+    title
+    content
+    author {
+      id
+      email
+    }
+    comments {
+      id
+    }
+    likes {
+      id
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetArticlesByUserIdGQL extends Apollo.Query<GetArticlesByUserIdQuery, GetArticlesByUserIdQueryVariables> {
+    document = GetArticlesByUserIdDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

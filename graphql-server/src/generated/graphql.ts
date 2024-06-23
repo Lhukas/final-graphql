@@ -51,9 +51,11 @@ export type Mutation = {
   __typename?: 'Mutation';
   addComment?: Maybe<Comment>;
   createArticle?: Maybe<Article>;
+  deleteArticle?: Maybe<Article>;
   likeArticle?: Maybe<Like>;
   login?: Maybe<AuthPayload>;
   signup?: Maybe<AuthPayload>;
+  updateArticle?: Maybe<Article>;
 };
 
 
@@ -66,6 +68,11 @@ export type MutationAddCommentArgs = {
 export type MutationCreateArticleArgs = {
   content: Scalars['String']['input'];
   title: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteArticleArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -85,16 +92,29 @@ export type MutationSignupArgs = {
   password: Scalars['String']['input'];
 };
 
+
+export type MutationUpdateArticleArgs = {
+  content: Scalars['String']['input'];
+  id: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
   article?: Maybe<Article>;
   articles?: Maybe<Array<Maybe<Article>>>;
+  articlesByUser?: Maybe<Array<Maybe<Article>>>;
   users?: Maybe<Array<Maybe<User>>>;
 };
 
 
 export type QueryArticleArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type QueryArticlesByUserArgs = {
+  userId: Scalars['Int']['input'];
 };
 
 export type User = {
@@ -237,14 +257,17 @@ export type LikeResolvers<ContextType = any, ParentType extends ResolversParentT
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addComment?: Resolver<Maybe<ResolversTypes['Comment']>, ParentType, ContextType, RequireFields<MutationAddCommentArgs, 'articleId' | 'content'>>;
   createArticle?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType, RequireFields<MutationCreateArticleArgs, 'content' | 'title'>>;
+  deleteArticle?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType, RequireFields<MutationDeleteArticleArgs, 'id'>>;
   likeArticle?: Resolver<Maybe<ResolversTypes['Like']>, ParentType, ContextType, RequireFields<MutationLikeArticleArgs, 'articleId'>>;
   login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   signup?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationSignupArgs, 'email' | 'password'>>;
+  updateArticle?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType, RequireFields<MutationUpdateArticleArgs, 'content' | 'id' | 'title'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   article?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType, RequireFields<QueryArticleArgs, 'id'>>;
   articles?: Resolver<Maybe<Array<Maybe<ResolversTypes['Article']>>>, ParentType, ContextType>;
+  articlesByUser?: Resolver<Maybe<Array<Maybe<ResolversTypes['Article']>>>, ParentType, ContextType, RequireFields<QueryArticlesByUserArgs, 'userId'>>;
   users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
 };
 

@@ -16,7 +16,7 @@ export class DasboardComponent implements OnInit {
 
   constructor(private articleService: ArticlesService, private router: Router) { }
 
-  displayedColumns: string[] = ['title', 'content', 'author', 'comments', 'likes', 'details'];
+
 
   ngOnInit(): void {
     this.loadArticles();

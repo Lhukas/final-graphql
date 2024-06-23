@@ -43,7 +43,7 @@ export class ArticleComponent implements OnInit {
     this.articlesService.addLike(this.articleId).subscribe(
       () => {
         this.isLiked = true;
-        this.loadArticle();
+        location.reload()
       },
       error => {
         console.error('Error adding like', error);
@@ -57,7 +57,7 @@ export class ArticleComponent implements OnInit {
     this.articlesService.addComment(this.articleId, this.newComment).subscribe(
       () => {
         this.newComment = '';
-        this.loadArticle();
+        location.reload()
       },
       error => {
         console.error('Error adding comment', error);

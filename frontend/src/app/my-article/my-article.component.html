@@ -1,11 +1,13 @@
 <app-nav></app-nav>
 <div class="article-container" *ngIf="article; else loading">
-  <h1 class="article-title">{{ article.title }}</h1>
-  <p class="article-content">{{ article.content }}</p>
-  <h3 class="author-info">Author: {{ article.author!.email }}</h3>
+  <h1 class="article-title"> <input type="text" class="article-title-input" [(ngModel)]="updatedTitle"></h1>
+  <div class="article-content">
+    <textarea class="article-content-textarea" [(ngModel)]="updatedContent">{{ article.content }}</textarea>
+  </div>
+  <h3 class="author-info">Auteur : <br>{{ article.author!.email }}</h3>
 
   <div class="comments-section" *ngIf="article.comments!.length > 0; else noComments">
-    <h4>Comments:</h4>
+    <h4>Commentaires :</h4>
     <ul class="comments-list">
       <li *ngFor="let comment of article.comments">
         {{ comment?.content }} - {{ comment?.author?.email }}
@@ -13,18 +15,15 @@
     </ul>
   </div>
   <ng-template #noComments>
-    <p class="no-comments">Soyez le premier à commenter</p>
+    <p class="no-comments">Pas de commentaire</p>
   </ng-template>
 
   <div class="likes-section">
     <h4>Likes: {{ article.likes?.length }}</h4>
-    <button class="like-button" (click)="addLike()" [disabled]="isLiked">Like</button>
   </div>
 
   <div class="add-comment-section">
-    <h4>Ajouter un commentaire:</h4>
-    <textarea [(ngModel)]="newComment" placeholder="Ajoutez votre commentaire ici"></textarea>
-    <button class="add-comment-button" (click)="addComment()">Publié</button>
+    <button class="add-comment-button" (click)="save()">Sauvegardé modifications</button>
   </div>
 </div>
 

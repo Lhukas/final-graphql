@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Article, Comment, Like } from '../graphql/generated';
+import {Article, Comment, DeleteArticleGQL, GetArticlesByUserIdGQL, Like, UpdateArticleGQL} from '../graphql/generated';
 import { GetArticleByIdGQL, GetArticlesWithDetailsGQL, AddCommentGQL, AddLikeGQL, CreateArticleGQL } from '../graphql/generated';
 
 
@@ -17,7 +17,10 @@ export class ArticlesService {
     private getArticlesWithDetailsGQL: GetArticlesWithDetailsGQL,
     private addCommentGQL: AddCommentGQL,
     private addLikeGQL: AddLikeGQL,
-    private createArticleGQL: CreateArticleGQL
+    private createArticleGQL: CreateArticleGQL,
+    private updateArticleGQL: UpdateArticleGQL,
+    private deleteArticleGQL: DeleteArticleGQL,
+    private getArticlesByUserIdGQL: GetArticlesByUserIdGQL
   ) { }
 
 
@@ -51,6 +54,28 @@ export class ArticlesService {
   createArticle(title: string, content: string): Observable<Article> {
     return this.createArticleGQL.mutate({ title, content }).pipe(
       map(result => result.data!.createArticle as Article)
+    );
+  }
+
+  // Méthode pour mettre à jour un article
+  updateArticle(id: number, title: string, content: string): Observable<Article> {
+    return this.updateArticleGQL.mutate({ id, title, content }).pipe(
+      map(result => result.data!.updateArticle as Article)
+    );
+  }
+
+  // Méthode pour supprimer un article
+  deleteArticle(id: number): Observable<number> {
+    return this.deleteArticleGQL.mutate({ id }).pipe(
+      // @ts-ignore
+      map(result => result.data!.deleteArticle.id)
+    );
+  }
+
+  // Méthode pour récupérer les articles d'un utilisateur
+  getArticlesByUserId(userId: number): Observable<Article[]> {
+    return this.getArticlesByUserIdGQL.watch({ userId }).valueChanges.pipe(
+      map(result => result.data.articlesByUser as Article[])
     );
   }
 

@@ -31,6 +31,27 @@ export class AuthService {
     });
   }
 
+
+  signUp(email: string, password: string) {
+    return this.apollo.mutate({
+      mutation: gql`
+        mutation signup($email: String!, $password: String!) {
+          signup(email: $email, password: $password) {
+            token
+            user {
+              id
+              email
+            }
+          }
+        }
+      `,
+      variables: {
+        email,
+        password
+      }
+    });
+  }
+
   logout(): void {
 
     sessionStorage.removeItem('token-user');

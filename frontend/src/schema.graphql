@@ -2,6 +2,7 @@ type Query {
     users: [User]
     articles: [Article]
     article(id: Int!): Article
+    articlesByUser(userId: Int!): [Article]
 }
 
 type Mutation {
@@ -10,6 +11,8 @@ type Mutation {
     createArticle(title: String!, content: String!): Article
     addComment(articleId: Int!, content: String!): Comment
     likeArticle(articleId: Int!): Like
+    updateArticle(id: Int!, title: String!, content: String!): Article
+    deleteArticle(id: Int!): Article
 }
 
 type User {

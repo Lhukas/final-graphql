@@ -9,10 +9,12 @@ import { DasboardComponent } from './dasboard/dasboard.component';
 import { HomeComponent } from './home/home.component';
 import { NavComponent } from './nav/nav.component';
 import { ArticleComponent } from './article/article.component';
-import { MessageService } from "./Services/message.service";
 import { ApolloModule, APOLLO_OPTIONS } from "apollo-angular";
 import { HttpLink } from 'apollo-angular/http';
 import { createApollo } from './apollo.config';
+import { CreateArticleComponent } from './create-article/create-article.component';
+import { MyArticlesComponent } from './my-articles/my-articles.component';
+import { MyArticleComponent } from './my-article/my-article.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,9 @@ import { createApollo } from './apollo.config';
     DasboardComponent,
     NavComponent,
     ArticleComponent,
+    CreateArticleComponent,
+    MyArticlesComponent,
+    MyArticleComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,7 +36,6 @@ import { createApollo } from './apollo.config';
     HttpClientModule
   ],
   providers: [
-    MessageService,
     {
       provide: APOLLO_OPTIONS,
       useFactory: (httpLink: HttpLink) => createApollo(httpLink),

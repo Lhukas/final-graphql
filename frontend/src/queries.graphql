@@ -72,3 +72,51 @@
       }
     }
   }
+
+
+  mutation UpdateArticle($id: Int!, $title: String!, $content: String!) {
+    updateArticle(id: $id, title: $title, content: $content) {
+      id
+      title
+      content
+      author {
+        id
+        email
+      }
+      comments {
+        id
+        content
+        author {
+          id
+          email
+        }
+      }
+      likes {
+        id
+      }
+    }
+  }
+
+  mutation DeleteArticle($id: Int!) {
+    deleteArticle(id: $id) {
+      id
+    }
+  }
+
+  query GetArticlesByUserId($userId: Int!) {
+    articlesByUser(userId: $userId) {
+      id
+      title
+      content
+      author {
+        id
+        email
+      }
+      comments {
+        id
+      }
+      likes {
+        id
+      }
+    }
+  }

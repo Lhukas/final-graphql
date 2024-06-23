@@ -13,6 +13,12 @@
   font-size: 2.5rem;
   margin-bottom: 10px;
   color: #333333;
+
+}
+.article-title input {
+  border: 1px solid black;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .article-content {
@@ -20,6 +26,15 @@
   line-height: 1.6;
   margin-bottom: 20px;
   color: #555555;
+}
+
+.article-content-textarea{
+  width: 100%;
+  border: 1px solid black;
+  padding: 5px;
+  border-radius: 5px;
+  height: 200px;
+
 }
 
 .author-info {

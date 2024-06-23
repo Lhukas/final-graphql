@@ -13,7 +13,6 @@ export class ConnexionPageComponent {
   constructor(private authService: AuthService, private router: Router, private apollo: Apollo) {}
 
   signUpForm = {
-    name: '',
     email: '',
     password: ''
   };
@@ -30,6 +29,32 @@ export class ConnexionPageComponent {
   }
 
   onSignUp() {
+    this.authService.signUp(this.signUpForm.email, this.signUpForm.password)
+      .subscribe(
+        ({ data }) => {
+          // Réussite de la connexion, gérer la réponse et éventuellement rediriger
+          console.log('Inscription réussie:', data);
+          // @ts-ignore
+          const token = data.signup.token;
+          // @ts-ignore
+          const id = data?.signup.user.id;
+
+          sessionStorage.setItem('token-user',token);
+
+          sessionStorage.setItem('ID-user', id);
+
+
+          this.apollo.client.resetStore();
+
+          this.router.navigate(['/dashboard']);
+
+        },
+        (error) => {
+
+          alert("L'inscription as échoué");
+
+        }
+      );
     // Handle sign up logic here
     console.log('Sign up form data:', this.signUpForm);
   }
@@ -43,8 +68,14 @@ export class ConnexionPageComponent {
           console.log('Connexion réussie:', data);
           // @ts-ignore
           const token = data.login.token; // Vérification optionnelle (?)
+          // @ts-ignore
+          const id = data?.login.user.id;
 
           sessionStorage.setItem('token-user',token);
+
+
+          sessionStorage.setItem('ID-user', id);
+
 
 
             this.apollo.client.resetStore(); // Réinitialiser le cache Apollo

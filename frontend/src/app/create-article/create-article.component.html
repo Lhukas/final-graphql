@@ -1,0 +1,16 @@
+<app-nav></app-nav>
+<div class="container-artciles">
+
+  <h1>Publier un article</h1>
+
+  <form (ngSubmit)="publishArticle()">
+    <h2>Titre article</h2>
+    <input type="text" placeholder="title" [(ngModel)]="articleDetails.title" name="title"/>
+    <h2>Contenu article</h2>
+
+    <textarea [(ngModel)]="articleDetails.content" name="content" placeholder="content" >
+
+    </textarea>
+    <button type="submit">Publié</button>
+  </form>
+</div>
