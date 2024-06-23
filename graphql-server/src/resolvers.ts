@@ -152,10 +152,34 @@ export const resolvers: Resolvers<Context> = {
                 throw new Error("Not authorized or article not found");
             }
 
-            return prisma.article.delete({
-                where: { id: args.id },
-            });
+            try {
+                // Vérifier s'il y a des commentaires liés à cet article
+                const comments = await prisma.comment.findMany({ where: { articleId: args.id } });
+
+                // Supprimer les commentaires s'il y en a
+                if (comments.length > 0) {
+                    await prisma.comment.deleteMany({ where: { articleId: args.id } });
+                }
+
+                // Vérifier s'il y a des likes liés à cet article
+                const likes = await prisma.like.findMany({ where: { articleId: args.id } });
+
+                // Supprimer les likes s'il y en a
+                if (likes.length > 0) {
+                    await prisma.like.deleteMany({ where: { articleId: args.id } });
+                }
+
+                // Maintenant supprimer l'article
+                return await prisma.article.delete({
+                    where: { id: args.id },
+                });
+
+            } catch (error) {
+                console.error("Error deleting article:", error);
+                throw new Error("Failed to delete article and associated comments/likes.");
+            }
         },
+
     },
     User: {
         articles: (parent) => prisma.article.findMany({ where: { authorId: parent.id } }),
